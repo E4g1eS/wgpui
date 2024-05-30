@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.hpp": "cpp",
+        "iostream": "cpp"
+    },
+    "C_Cpp.default.includePath": [
+        "/usr/share/emscripten/system/include/**",
+        "/usr/share/emscripten/cache/sysroot/include/**"
+    ]
+}
