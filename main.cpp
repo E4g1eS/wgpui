@@ -1,4 +1,4 @@
-#include "webgpu.h"
+#include <webgpu/webgpu.h>
 #include <emscripten.h>
 #include <emscripten/html5.h>
 #include <iostream>
