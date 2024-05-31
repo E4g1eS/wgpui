@@ -3,23 +3,34 @@
 #include <emscripten/html5.h>
 #include <iostream>
 
-WGPUAdapter adapter;
-WGPUDevice device;
+// Global variables for WGPUAdapter and WGPUDevice
+WGPUAdapter adapter = nullptr;
+WGPUDevice device = nullptr;
+
+// Callback function for adapter request
+void onAdapterRequest(WGPURequestAdapterStatus status, WGPUAdapter result, const char* message, void* userdata) {
+    if (status == WGPURequestAdapterStatus_Success) {
+        adapter = result;
+        std::cout << "Adapter request succeeded" << std::endl;
+
+        // Now request the device
+        WGPUDeviceDescriptor deviceDesc = {};
+        wgpuAdapterRequestDevice(adapter, &deviceDesc, [](WGPURequestDeviceStatus status, WGPUDevice result, const char* message, void* userdata) {
+            if (status == WGPURequestDeviceStatus_Success) {
+                device = result;
+                std::cout << "Device request succeeded" << std::endl;
+            } else {
+                std::cerr << "Device request failed: " << message << std::endl;
+            }
+        }, nullptr);
+    } else {
+        std::cerr << "Adapter request failed: " << message << std::endl;
+    }
+}
 
 void initializeWebGPU() {
-    // Request the adapter
     WGPURequestAdapterOptions options = {};
-    
-    wgpuInstanceRequestAdapter(nullptr, &options, [](WGPURequestAdapterStatus status, WGPUAdapter result, const char* message, void* userdata) {
-        adapter = result;
-    }, nullptr);
-
-    // Request the device
-    WGPUDeviceDescriptor deviceDesc = {};
-    wgpuAdapterRequestDevice(adapter, &deviceDesc, [](WGPURequestDeviceStatus status, WGPUDevice result, const char* message, void* userdata) {
-        device = result;
-    }, nullptr);
-    std::cout << "WebGPU initialized" << std::endl;
+    wgpuInstanceRequestAdapter(nullptr, &options, onAdapterRequest, nullptr);
 }
 
 int main() {
