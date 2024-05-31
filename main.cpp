@@ -3,8 +3,22 @@
 #include <emscripten/html5.h>
 #include <iostream>
 
+WGPUAdapter adapter;
+WGPUDevice device;
+
 void initializeWebGPU() {
-    // Your WebGPU initialization code here
+    // Request the adapter
+    WGPURequestAdapterOptions options = {};
+    
+    wgpuInstanceRequestAdapter(nullptr, &options, [](WGPURequestAdapterStatus status, WGPUAdapter result, const char* message, void* userdata) {
+        adapter = result;
+    }, nullptr);
+
+    // Request the device
+    WGPUDeviceDescriptor deviceDesc = {};
+    wgpuAdapterRequestDevice(adapter, &deviceDesc, [](WGPURequestDeviceStatus status, WGPUDevice result, const char* message, void* userdata) {
+        device = result;
+    }, nullptr);
     std::cout << "WebGPU initialized" << std::endl;
 }
 

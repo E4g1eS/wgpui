@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "emcc main.cpp -o build/index.html -s USE_WEBGPU=1 -s EXPORTED_FUNCTIONS=\"['_main']\" -s FORCE_FILESYSTEM=1",
+            "dependsOn": [
+                "Create build dir"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Create build dir",
+            "type": "shell",
+            "command": "mkdir -p build",
+            "problemMatcher": [],
+            "hide": true
+        },
+        {
+            "label": "Serve",
+            "type": "shell",
+            "command": "emrun --no_browser --port 8080 build",
+            "problemMatcher": []
+        }
+    ]
+  }

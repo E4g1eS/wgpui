@@ -5,6 +5,8 @@
     },
     "C_Cpp.default.includePath": [
         "/usr/share/emscripten/system/include/**",
-        "/usr/share/emscripten/cache/sysroot/include/**"
+        "/usr/share/emscripten/cache/sysroot/include/**",
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/third-party"
     ]
 }
